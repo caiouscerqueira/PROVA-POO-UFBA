@@ -45,6 +45,7 @@ public class Main {
 		
 		participantes.add(participante);
 		
+		
 		//leitor.close();
 	}
 	
