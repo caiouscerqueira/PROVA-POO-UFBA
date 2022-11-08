@@ -14,11 +14,19 @@ public class GeneralChairs extends Organizador {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public boolean validarInscricao() {
-		
-		return false;
+	public String validarInscricao(boolean validacao) {
+		String validado;
+		if(validacao) {
+			validado = "Inscrição validada";
+		}else {
+			validado = "Inscrição invalidada";
+		}
+				
+		return validado;
 		
 	}
+	
+	
 	
 	public String emitirCertificado() {
 		
