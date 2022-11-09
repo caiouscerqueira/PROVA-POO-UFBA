@@ -9,7 +9,7 @@ package vo;
  */
 public class Especialista extends Pessoa {
 	
-	protected String areaEspecialidade;
+	public String areaEspecialidade;
 
 	/**
 	 * @param cpf

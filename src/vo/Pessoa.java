@@ -14,7 +14,15 @@ public abstract class Pessoa {
 	protected String nascimento;
 	protected String tituloAcademico;
 	protected String senha;
-	
+	protected String tipo;
+	/**
+	 * @param cPF
+	 * @param senha
+	 */
+	public Pessoa(String cPF, String senha) {
+		CPF = cPF;
+		this.senha = senha;
+	}
 	
 	/**
 	 * @param cPF

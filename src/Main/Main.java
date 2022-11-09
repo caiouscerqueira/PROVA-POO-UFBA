@@ -5,6 +5,7 @@ import java.util.Scanner;
 import vo.Artigo;
 import vo.GeneralChairs;
 import vo.Participante;
+import vo.Usuario;
 
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
@@ -13,8 +14,9 @@ import java.util.Collections;
 public class Main {
 	
 	List<Participante> participantes = new ArrayList<>();
-	List<Artigo> produtos = new ArrayList<>();
-	
+	List<Usuario> usuariosPendentes = new ArrayList<>();
+	List<Artigo> artigos = new ArrayList<>();
+	List<Usuario> usuarios = new ArrayList<>();
 	private void exibirMenu(){
 		System.out.println("\n\n");
 		System.out.println("+-------------------------------------------+");
@@ -38,59 +40,48 @@ public class Main {
 		System.out.println("+-------------------------------------------+");
 	}
 	
-	 private static boolean valida_cpf(Participante participante){
-		 if(participante.getCPF().isEmpty()){
-				System.out.print("O CPF não pode ser vazio.\n");
+	 private static boolean valida_usuario(Usuario usuario){
+		 if(usuario.getTipo().isEmpty()){
+				System.out.print("O tipo não pode ser vazio.\n");
 				return false;
-			}else if(!participante.getCPF().matches("[0-9]+")) {
-				System.out.print("Digite apenas os números do CPF.\n");
+			}else if(!usuario.getTipo().equalsIgnoreCase("P") && !usuario.getTipo().equalsIgnoreCase("O") && !usuario.getTipo().equalsIgnoreCase("E")){
+				System.out.print("Digite apenas uma das opções disponíveis.\n");
 				return false;
-			}else if(participante.getCPF().length() != 11) {
-				System.out.print("Digite todos os números do CPF.\n");
+			}else if(usuario.getTipo().length() != 1) {
+				System.out.print("Digite apenas uma das opções disponíveis.\n");
 				return false;
 			}   
 		 return true;
 	}
-	private static boolean valida_senha(Participante participante) {
-		if(participante.getSenha().isEmpty()){
+	private static boolean valida_senha(Usuario usuario) {
+		if(usuario.getSenha().isEmpty()){
 			System.out.print("A senha não pode ser vazia.\n");
 			return false;
-		}else if(participante.getSenha().length() <6 || participante.getSenha().length()>8) {
+		}else if(usuario.getSenha().length() <6 || usuario.getSenha().length()>8) {
 			System.out.print("Senha inválida.\n");
 			return false;
 		}
 		return true;
 	}
-	private void fazerLogin(){
+	private void fazerLogin(Usuario usuario){
 		Scanner scanner = new Scanner(System.in);
-		Participante participante = new Participante(null, null, null, null, null);
-		boolean validador = false;
-		try {
+		boolean validador = false; 
+		try{ 
 			do {
-				System.out.print("Digite o CPF para realizar o login: ");
-				participante.setCPF(scanner.next());
-				validador = valida_cpf(participante);
-			}while (!validador);	
-			
-			do {
-				System.out.print("Digite sua senha, ela dever conter entre 6 e 8 caracteres: ");
-				scanner.nextLine();
-				participante.setSenha(scanner.next());
-				validador = valida_senha(participante);
-			}while (!validador);		
-				
-			System.out.print("\nLogin efetuado com sucesso");
-			
-		}catch  (Exception e) {
-			System.out.print("Erro: " + e.getMessage());
-		}
-		//scanner.close();
+				System.out.print("Digite o tipo de Usuario. Digite 'P' para participante, 'E' para especialisa ou 'O' para organizador  : ");
+				usuario.setTipo(scanner.next()); 
+				validador = valida_usuario(usuario); 
+			}while  (!validador);
+		 
+		usuarios.add(usuario);
+		System.out.print("\nLogin efetuado com sucesso"); 
+		}catch (Exception e) { System.out.print("Erro: " + e.getMessage()); }
+		
 	}
 	
-	private void inscreverParticipante(){
+	private void inscreverParticipante(Usuario participante){
 		Scanner scanner = new Scanner(System.in);
-		Participante participante = new Participante(null, null, null, null, null);
-		
+				
 		System.out.print("Nome do participante: ");
 		participante.setNome(scanner.next());
 		
@@ -104,23 +95,68 @@ public class Main {
 		scanner.nextLine(); 
 		participante.setCPF(scanner.nextLine());
 		
-		participantes.add(participante);
+		usuariosPendentes.add(participante);
 		
 				
 	}
 	
-	private void validarInscricao(){
-		GeneralChairs generalchair = new GeneralChairs(null, null, null, null, null);
-		generalchair.validarInscricao(true);
+	private void validarInscricao(Usuario usuario){
+		boolean validar = true;
+		if(usuario.getTipo().equalsIgnoreCase("O")) {
+			GeneralChairs generalchair = new GeneralChairs(null, null, null, null, null);
+			generalchair.validarInscricao(usuariosPendentes, validar);
+		}
+	}
+	
+	private void invalidarInscricao(Usuario usuario){
+		boolean validar = false;
+		if(usuario.getTipo().equalsIgnoreCase("O")) {
+			GeneralChairs generalchair = new GeneralChairs(null, null, null, null, null);
+			generalchair.validarInscricao(usuariosPendentes, validar);
+		}
+	}
+	
+	private void emitirCertificado(Usuario usuario){
+		if(usuario.getTipo().equalsIgnoreCase("O")) {
+			GeneralChairs generalchair = new GeneralChairs(null, null, null, null, null);
+			for(Participante participante : participantes){
+				String certificado =	generalchair.emitirCertificado(participante);
+				System.out.println(certificado +" para o participante "+participante.getNome()+" de CPF "+participante.getCPF()+".");
+			}
+		}
+	}
+	
+	private void submeterArtigo(Usuario usuario) {
 		
 	}
 	
-	private void invalidarInscricao(){
-		GeneralChairs generalchair = new GeneralChairs(null, null, null, null, null);
-		generalchair.validarInscricao(false);
+	private void enviarAvaliacao(Usuario usuario) {
 		
 	}
 	
+	private void visualizarAvaliacoes(Usuario usuario) {
+		
+	}
+	
+	private void aceitarArtigo(Usuario usuario) {
+		
+	}
+	
+	private void rejeitarArtigo(Usuario usuario) {
+		
+	}
+	
+	private void listarArtigosAceitos() {
+		
+	}
+	
+	private void listarArtigosNegados() {
+		
+	}
+	
+	private void visualizarDadosArtigo(Usuario usuario) {
+		
+	}
 	private void listarParticipantes(){
 		Collections.sort(participantes);
 		for(Participante participante : participantes){
@@ -136,62 +172,66 @@ public class Main {
 		short opcao = 50;
 		Scanner scanner = new Scanner(System.in);
 		Main teste = new Main();
-
+		Usuario usuario = new Usuario(null, null);
 		do{
 			teste.exibirMenu();
-		
+			
 			System.out.print("Opção escolhida: ");
 			opcao = scanner.nextShort();
 			
 			switch(opcao){
 				case 1:
-					teste.fazerLogin();
+					
+					usuario.fazerLogin();
+					teste.fazerLogin(usuario);
 					break;
 				case 2:
-					teste.inscreverParticipante();
+					if(usuario.getTipo().equalsIgnoreCase("p")) {
+						teste.inscreverParticipante(usuario);
+					}
 					break;
 				case 3:
-					teste.validarInscricao();
+					teste.validarInscricao(usuario);
 					break;	
 				case 4:
-					teste.invalidarInscricao();
+					teste.invalidarInscricao(usuario);
 					break;	
 				case 5:
-					teste.inscreverParticipante();
+					teste.emitirCertificado(usuario);
 					break;	
 				case 6:
-					teste.inscreverParticipante();
+					teste.submeterArtigo(usuario);
 					break;	
 				case 7:
-					teste.inscreverParticipante();
+					teste.enviarAvaliacao(usuario);
 					break;	
 				case 8:
-					teste.inscreverParticipante();
+					teste.visualizarAvaliacoes(usuario);
 					break;	
 				case 9:
-					teste.inscreverParticipante();
+					teste.aceitarArtigo(usuario);
 					break;	
 				case 10:
-					teste.inscreverParticipante();
+					teste.rejeitarArtigo(usuario);
 					break;	
 				case 11:
-					teste.inscreverParticipante();
+					teste.listarArtigosAceitos();
 					break;
 				case 12:
-					teste.inscreverParticipante();
+					teste.listarArtigosNegados();
 					break;	
 				case 13:
-					teste.inscreverParticipante();
+					teste.visualizarDadosArtigo(usuario);
 					break;	
 				case 14:
 					teste.listarParticipantes();
 					break;
-				case 15:
-					teste.exibirMenu();
-					break;
+				/*
+				 * case 15: teste.exibirMenu(); break;
+				 */
 				default:
 					teste.exibirMenu();
 			}
-		}while(opcao != 99);
+		}while(opcao != 15);
 	}
 }
