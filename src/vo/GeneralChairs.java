@@ -12,27 +12,30 @@ import java.util.List;
  */
 public class GeneralChairs extends Organizador {
 
-	public GeneralChairs(String cPF, String nome, String nascimento, String tituloAcademico, String senha) {
-		super(cPF, nome, nascimento, tituloAcademico, senha);
-		// TODO Auto-generated constructor stub
-	}
 	
+	public GeneralChairs(String tipo, String subTipo) {
+		super(tipo);
+		this.setSubTipo("G");
+	}
+
+
+
+	public GeneralChairs(String cpf, String senha, String tipo, String subTipo) {
+		super(cpf, senha, tipo);
+		this.setSubTipo("G");
+	}
+
+
+
 	public List<Participante> validarInscricao(List<Usuario> usuariosPendentes, boolean validar) {
 		List<Participante> participantesInscritos = new ArrayList<>();
 		List<Participante> participantesNegados = new ArrayList<>();
-		Participante participante = new Participante(null, null, null, null, null);
+		
 		for(Usuario usuario : usuariosPendentes){
+			Participante participante = new Participante(usuario.getCPF(), usuario.getNome(), usuario.getNascimento(), usuario.getTituloAcademico(), usuario.getSenha(),usuario.getInstituicaoVinculada(), usuario.getTipo());
 			if(usuario.getTipo().equals("P")) {
-				participante.setCPF(usuario.getCPF());
-				participante.setNascimento(usuario.getNascimento());
-				participante.setNome(usuario.getNome());
-				participante.setTituloAcademico(usuario.getTituloAcademico());
 				participantesInscritos.add(participante);
 			}else {
-				participante.setCPF(usuario.getCPF());
-				participante.setNascimento(usuario.getNascimento());
-				participante.setNome(usuario.getNome());
-				participante.setTituloAcademico(usuario.getTituloAcademico());
 				participantesNegados.add(participante);
 			}
 		}

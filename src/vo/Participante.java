@@ -7,19 +7,46 @@ package vo;
  * @author CaiS2Lai
  *
  */
-public class Participante extends Pessoa implements Comparable<Participante> {
+public class Participante extends Usuario implements Comparable<Participante> {
+
+	private boolean assistiuPalestra;
 	
-	public Participante(String cpf, String nome, String nascimento, String tituloAcademico, String senha) {
-		super(cpf, nome, nascimento, tituloAcademico, senha);
-		// TODO Auto-generated constructor stub
+	/**
+	 * @param tipo
+	 */
+	public Participante(String tipo) {
+		this.setTipo("P");
+		
 	}
-	
+
+	/**
+	 * @param cpf
+	 * @param nome
+	 * @param nascimento
+	 * @param tituloAcademico
+	 * @param senha
+	 * @param instituicaoVinculada
+	 * @param tipo
+	 * @param assistiuPalestra
+	 */
+	public Participante(String cpf, String nome, String nascimento, String tituloAcademico, String senha,
+			String instituicaoVinculada, String tipo, boolean assistiuPalestra) {
+		super(cpf, nome, nascimento, tituloAcademico, senha, instituicaoVinculada, tipo);
+		this.assistiuPalestra = assistiuPalestra;
+	}
+
 	public Participante(String cpf, String senha) {
 		super(cpf,senha);
 		
 		// TODO Auto-generated constructor stub
 	}
 	
+	public Participante(String cpf, String nome, String nascimento,  String tituloAcademico,  String senha, String instituicaoVinculada,
+			String tipo) {
+		super(cpf, nome, nascimento, tituloAcademico, senha, instituicaoVinculada);
+		this.setTipo("P");
+	}
+
 	public int compareTo(Participante p1, Participante p2) {
 		// TODO Auto-generated method stub
 		 return p1.getNome().compareTo(p2.getNome());
@@ -30,7 +57,24 @@ public class Participante extends Pessoa implements Comparable<Participante> {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
 	
+	public void assistirPalestra() {
+		this.assistiuPalestra = true;
+	}
 
+	/**
+	 * @return the assistiuPalestra
+	 */
+	public boolean isAssistiuPalestra() {
+		return assistiuPalestra;
+	}
+
+	/**
+	 * @param assistiuPalestra the assistiuPalestra to set
+	 */
+	public void setAssistiuPalestra(boolean assistiuPalestra) {
+		this.assistiuPalestra = assistiuPalestra;
+	}
+	
+	
 }

@@ -8,12 +8,17 @@ package vo;
  *
  */
 public class ProgramChairs extends Organizador {
-
-	public ProgramChairs(String cPF, String nome, String nascimento, String tituloAcademico, String senha) {
-		super(cPF, nome, nascimento, tituloAcademico, senha);
-		// TODO Auto-generated constructor stub
+	
+	
+	
+	
+	public ProgramChairs(String tipo, String subTipo) {
+		super(tipo);
+		this.setSubTipo("P");
 	}
 	
+	
+
 	public boolean aceitarArtigo() {
 		
 		return false;

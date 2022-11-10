@@ -14,7 +14,16 @@ public abstract class Pessoa {
 	protected String nascimento;
 	protected String tituloAcademico;
 	protected String senha;
-	protected String tipo;
+	protected String instituicaoVinculada;
+	
+	
+	
+	/**
+	 * 
+	 */
+	public Pessoa() {
+	}
+
 	/**
 	 * @param cPF
 	 * @param senha
@@ -29,15 +38,17 @@ public abstract class Pessoa {
 	 * @param nome
 	 * @param nascimento
 	 * @param tituloAcademico
-	 * @param login
 	 * @param senha
+	 * @param instituicaoVinculada
 	 */
-	public Pessoa(String cpf, String nome, String nascimento, String tituloAcademico, String senha) {
-		CPF = cpf;
+	public Pessoa(String cPF, String nome, String nascimento, String tituloAcademico, String senha,
+			String instituicaoVinculada) {
+		CPF = cPF;
 		this.nome = nome;
 		this.nascimento = nascimento;
 		this.tituloAcademico = tituloAcademico;
 		this.senha = senha;
+		this.instituicaoVinculada = instituicaoVinculada;
 	}
 
 	/**
@@ -103,6 +114,20 @@ public abstract class Pessoa {
 	 */
 	public void setSenha(String senha) {
 		this.senha = senha;
+	}
+
+	/**
+	 * @return the instituicaoVinculada
+	 */
+	public String getInstituicaoVinculada() {
+		return instituicaoVinculada;
+	}
+
+	/**
+	 * @param instituicaoVinculada the instituicaoVinculada to set
+	 */
+	public void setInstituicaoVinculada(String instituicaoVinculada) {
+		this.instituicaoVinculada = instituicaoVinculada;
 	}
 	
 	

@@ -11,13 +11,12 @@ import java.util.Scanner;
  */
 public class Usuario extends Pessoa {
 
-	public Usuario(String cpf, String nome, String nascimento, String tituloAcademico, String senha, String tipo) {
-		super(cpf, nome, nascimento, tituloAcademico, senha);
+	private String tipo;
+	public Usuario(String cpf, String nome, String nascimento, String tituloAcademico, String senha, String instituicaoVinculada,String tipo) {
+		super(cpf, nome, nascimento, tituloAcademico, senha, instituicaoVinculada);
 		// TODO Auto-generated constructor stub
 		this.tipo = tipo; 
 	}
-
-	private String tipo;
 
 	/**
 	 * @param cPF
@@ -36,6 +35,24 @@ public class Usuario extends Pessoa {
 	// TODO Auto-generated constructor stub 
 	}
 	
+
+	public Usuario() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	
+
+	/**
+	 * @param tipo
+	 */
+	public Usuario(String tipo) {
+		this.tipo = tipo;
+	}
+
+	public Usuario(String cpf, String nome, String nascimento, String tituloAcademico, String senha,
+			String instituicaoVinculada) {
+		super(cpf, nome, nascimento, tituloAcademico, senha, instituicaoVinculada);
+	}
 
 	/**
 	 * @return the tipo
@@ -77,7 +94,7 @@ public class Usuario extends Pessoa {
 	public Usuario fazerLogin(){
 		Scanner scanner = new Scanner(System.in);
 		
-		Usuario usuario = new Usuario(null, null, null);
+		Usuario usuario = new Usuario();
 		
 		boolean validador = false;
 		try {

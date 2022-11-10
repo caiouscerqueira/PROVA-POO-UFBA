@@ -9,10 +9,18 @@ package vo;
  */
 public class RevisorArtigo extends Especialista {
 
-	public RevisorArtigo(String cPF, String nome, String nascimento, String tituloAcademico, String senha,
-			String areaEspecialidade) {
-		super(cPF, nome, nascimento, tituloAcademico, senha, areaEspecialidade);
+	
+
+
+	public RevisorArtigo(String cpf, String nome, String nascimento, String tituloAcademico, String senha,
+			String instituicaoVinculada, String tipo, String subTipo, String areaEspecialidade) {
+		super(cpf, nome, nascimento, tituloAcademico, senha, instituicaoVinculada, tipo, "R", areaEspecialidade);
 		// TODO Auto-generated constructor stub
+	}
+
+	public RevisorArtigo(String tipo, String subTipo) {
+		super(tipo);
+		this.setSubTipo("R");
 	}
 
 	public void analisarArtigo() {}
