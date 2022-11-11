@@ -41,6 +41,10 @@ public class Especialista extends Usuario {
 	public Especialista(String tipo) {
 		this.setTipo("E");
 	}
+	public Especialista(String cpf, String senha, String tipo) {
+		super(cpf,senha);
+		this.setTipo("E");
+	}
 	/**
 	 * @return the areaEspecialidade
 	 */

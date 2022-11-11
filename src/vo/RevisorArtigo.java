@@ -3,6 +3,8 @@
  */
 package vo;
 
+import java.util.List;
+
 /**
  * @author CaiS2Lai
  *
@@ -10,8 +12,6 @@ package vo;
 public class RevisorArtigo extends Especialista {
 
 	
-
-
 	public RevisorArtigo(String cpf, String nome, String nascimento, String tituloAcademico, String senha,
 			String instituicaoVinculada, String tipo, String subTipo, String areaEspecialidade) {
 		super(cpf, nome, nascimento, tituloAcademico, senha, instituicaoVinculada, tipo, "R", areaEspecialidade);
@@ -23,8 +23,24 @@ public class RevisorArtigo extends Especialista {
 		this.setSubTipo("R");
 	}
 
-	public void analisarArtigo() {}
+	public RevisorArtigo(String cpf, String senha, String tipo, String subTipo) {
+		super(cpf, senha, tipo);
+		this.setSubTipo("R");
+	}
+
+		
+	public void revisarArtigo(List<Artigo> artigos, RevisorArtigo revisor) {
+		
+		for(int i =0; i < artigos.size(); i++) {
+			artigos.get(i).getRevisores().add(revisor);
+				
+		}
 	
-	public String avaliarArtigo() {
-		return areaEspecialidade;}
+		
+	}
+
+	public void visualiarAvaliacao(Artigo artigo) {
+		artigo.getRevisores();
+		
+	}
 }

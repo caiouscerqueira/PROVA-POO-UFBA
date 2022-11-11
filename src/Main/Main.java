@@ -101,13 +101,16 @@ public class Main {
 			}   
 		 return true;
 	} 
-	/*
-	 * private static boolean valida_senha(Usuario usuario) {
-	 * if(usuario.getSenha().isEmpty()){
-	 * System.out.print("A senha não pode ser vazia.\n"); return false; }else
-	 * if(usuario.getSenha().length() <6 || usuario.getSenha().length()>8) {
-	 * System.out.print("Senha inválida.\n"); return false; } return true; }
-	 */
+
+	private static boolean validaUsuario (Usuario usuario, List<Usuario> usuarios) {
+		if(!usuarios.contains(usuario)) {
+			System.out.print("Realize login para depois emitir certificados. ");
+			new Exception("Login não realizado");
+			return false;
+		}
+		
+		return true;
+	}  
 	private void fazerLogin(Usuario usuario){
 		Scanner scanner = new Scanner(System.in);
 		boolean validador = false; 
@@ -197,7 +200,7 @@ public class Main {
 		try {
 		
 			if(!usuarios.contains(usuarioParticipante)) {
-				System.out.print("Realize login para acessar as demais opções. ");
+				System.out.print("Realize login para depois inscrever participante. ");
 				new Exception("Login não realizado");
 				return;
 			}
@@ -218,13 +221,13 @@ public class Main {
 			usuarioParticipante.setInstituicaoVinculada(scanner.nextLine());
 			
 			usuariosPendentes.add(usuarioParticipante);
-			
+			System.out.print("Inscrição pendente de aprovação. ");
 		}catch (Exception e) { System.out.print("Erro: " + e.getMessage()); }	
 	}
 	
 	private void validarInscricao(Usuario usuarioGeneralChaiirs){
 		if(!usuarios.contains(usuarioGeneralChaiirs)) {
-			System.out.print("Realize login para acessar as demais opções. ");
+			System.out.print("Realize login para depois validar inscrições. ");
 			new Exception("Login não realizado");
 			return;
 		}
@@ -240,20 +243,20 @@ public class Main {
 		
 		GeneralChairs generalChairs = new GeneralChairs(organizador.getCPF(), organizador.getSenha(), organizador.getTipo(), organizador.getSubTipo());
 		
-		if(!organizadoresGeneralChairs.contains(usuarioGeneralChaiirs)) {
-			System.out.print("O usuário não pode validar a inscrição, pois não é General Chairs. ");
+		if(!organizadoresGeneralChairs.contains(generalChairs)) {
+			System.out.print("O Organizador não pode validar a inscrição, pois não é General Chairs. ");
 			new Exception("Acesso não permitido");
 			return;
 		}
 		
 		boolean validar = true;
-		generalChairs.validarInscricao(usuariosPendentes, validar);
+		participantes.addAll(generalChairs.validarInscricao(usuariosPendentes, validar));
 		
 	}
 	
 	private void invalidarInscricao(Usuario usuarioGeneralChaiirs){
 		if(!usuarios.contains(usuarioGeneralChaiirs)) {
-			System.out.print("Realize login para acessar as demais opções. ");
+			System.out.print("Realize login para depois invalidar inscrições. ");
 			new Exception("Login não realizado");
 			return;
 		}
@@ -269,20 +272,27 @@ public class Main {
 		
 		GeneralChairs generalChairs = new GeneralChairs(organizador.getCPF(), organizador.getSenha(), organizador.getTipo(), organizador.getSubTipo());
 		
-		if(!organizadoresGeneralChairs.contains(usuarioGeneralChaiirs)) {
-			System.out.print("O usuário não pode validar a inscrição, pois não é General Chairs. ");
+		if(!organizadoresGeneralChairs.contains(generalChairs)) {
+			System.out.print("O Organizador não pode validar a inscrição, pois não é General Chairs. ");
 			new Exception("Acesso não permitido");
 			return;
 		}
 		
 		boolean validar = false;
-		generalChairs.validarInscricao(usuariosPendentes, validar);
-		
+	List<Participante> participantesInvalidadosList =	generalChairs.validarInscricao(usuariosPendentes, validar);
+		if(participantesInvalidadosList != null && participantesInvalidadosList.size() > 0 && !participantesInvalidadosList.isEmpty()) {
+			System.out.print("Participantes com inscrições invalidadas: ");
+			for(int k = 0; k < participantesInvalidadosList.size(); k++) {
+				System.out.print("Participantes com inscrições invalidadas: ");
+				System.out.print("Nome: "+participantesInvalidadosList.get(k).getNome()+ "CPF: "+participantesInvalidadosList.get(k).getCPF() );
+			}
+				
+		}	
 	}
 	
 	private void emitirCertificado(Usuario usuarioGeneralChaiirs){
 		if(!usuarios.contains(usuarioGeneralChaiirs)) {
-			System.out.print("Realize login para acessar as demais opções. ");
+			System.out.print("Realize login para depois emitir certificados. ");
 			new Exception("Login não realizado");
 			return;
 		}
@@ -298,8 +308,8 @@ public class Main {
 		
 		GeneralChairs generalChairs = new GeneralChairs(organizador.getCPF(), organizador.getSenha(), organizador.getTipo(), organizador.getSubTipo());
 		
-		if(!organizadoresGeneralChairs.contains(usuarioGeneralChaiirs)) {
-			System.out.print("O usuário não pode validar a inscrição, pois não é General Chairs. ");
+		if(!organizadoresGeneralChairs.contains(generalChairs)) {
+			System.out.print("O Organizador não pode validar a inscrição, pois não é General Chairs. ");
 			new Exception("Acesso não permitido");
 			return;
 		}
@@ -311,36 +321,251 @@ public class Main {
 		}
 	}
 	
-	private void submeterArtigo(Usuario usuario) {
+	private void submeterArtigo(Usuario usuarioEspecialista) {
+		if(!usuarios.contains(usuarioEspecialista)) {
+			System.out.print("Realize login para depois submeter um artigo. ");
+			new Exception("Login não realizado");
+			return;
+		}
+			
+		Especialista especialista = new Especialista(usuarioEspecialista.getCPF(),usuarioEspecialista.getSenha(),usuarioEspecialista.getTipo());
 		
+		if(!especialistas.contains(especialista)) {
+			System.out.print("O usuário não pode submeter artigo, pois não é Especialista. ");
+			new Exception("Acesso não permitido");
+			return;
+		}
+		especialista.setSubTipo("A");
+		
+		AutorArtigo autorArtigo = new AutorArtigo(especialista.getCPF(), especialista.getSenha(), especialista.getTipo(), especialista.getSubTipo());
+		
+		if(!especialistasAutorArtigo.contains(autorArtigo)) {
+			System.out.print("O Especialista não pode submeter artigo, pois não é  Autor. ");
+			new Exception("Acesso não permitido");
+			return;
+		}
+		
+	Artigo artigo =	autorArtigo.submeterArtigo(autorArtigo);
+	artigos.add(artigo);
 	}
 	
-	private void enviarAvaliacao(Usuario usuario) {
+	private void enviarAvaliacao(Usuario usuarioEspecialista) {
+		if(!usuarios.contains(usuarioEspecialista)) {
+			System.out.print("Realize login para depois submeter um artigo. ");
+			new Exception("Login não realizado");
+			return;
+		}
+			
+		Especialista especialista = new Especialista(usuarioEspecialista.getCPF(),usuarioEspecialista.getSenha(),usuarioEspecialista.getTipo());
 		
+		if(!especialistas.contains(especialista)) {
+			System.out.print("O usuário não pode enviar avalição do  artigo, pois não é Especialista. ");
+			new Exception("Acesso não permitido");
+			return;
+		}
+		especialista.setSubTipo("A");
+		
+		RevisorArtigo revisorArtigo = new RevisorArtigo(especialista.getCPF(), especialista.getSenha(), especialista.getTipo(), especialista.getSubTipo());
+		
+		if(!especialistasAutorArtigo.contains(revisorArtigo)) {
+			System.out.print("O Especialista não pode enviar avalição do artigo, pois não é  Revisor. ");
+			new Exception("Acesso não permitido");
+			return;
+		}
+		
+		revisorArtigo.revisarArtigo(artigos, revisorArtigo);
+	
 	}
 	
 	private void visualizarAvaliacoes(Usuario usuario) {
+		if(!usuarios.contains(usuario)) {
+			System.out.print("Realize login para depois visualizar avaliações. ");
+			new Exception("Login não realizado");
+			return;
+		}
+		if(usuario.getTipo().equalsIgnoreCase("O")) {	
+			Organizador organizador = new Organizador(usuario.getCPF(),usuario.getSenha(),usuario.getTipo());
+			
+			if(!organizadores.contains(organizador)) {
+				System.out.print("O usuário não pode visualizar avaliações, pois não é Organizador. ");
+				new Exception("Acesso não permitido");
+				return;
+			}
+			organizador.setSubTipo("P");
+			
+			ProgramChairs programChairs = new ProgramChairs(organizador.getCPF(), organizador.getSenha(), organizador.getTipo(), organizador.getSubTipo());
+			
+			if(!organizadoresProgramChairs.contains(programChairs)) {
+				System.out.print("O Organizador não pode visualizar avaliações, pois não é Program Chairs. ");
+				new Exception("Acesso não permitido");
+				return;
+			}
+			
+			programChairs.visualiarAvaliacao(artigos);
+			
+			for(Artigo artigo : artigos){
+				System.out.println("\nArtigo: " + artigo.getId());
+				for(RevisorArtigo revisor : artigo.getRevisores()) {
+					System.out.println("\nRevisores: " + revisor.getNome() );
+				}
+				
+				System.out.println("\n\n");
+			}
+			
+		}else if(usuario.getTipo().equalsIgnoreCase("E")) {	
+			Especialista especialista = new Especialista(usuario.getCPF(),usuario.getSenha(),usuario.getTipo());
+			
+			if(!especialistas.contains(especialista)) {
+				System.out.print("O usuário não pode visualizar avaliações, pois não é Especialista. ");
+				new Exception("Acesso não permitido");
+				return;
+			}
+			
+			for(RevisorArtigo revisorartigo : especialistasRevisorArtigo ) {
+				if(revisorartigo.getCPF().equalsIgnoreCase(especialista.getCPF())){
+					RevisorArtigo revisor = new RevisorArtigo(especialista.getCPF(), especialista.getSenha(), especialista.getTipo(), especialista.getSubTipo());
+					
+					for(Artigo artigo : artigos) {
+						if(artigo.getRevisores().contains(revisor)) {
+							revisor.visualiarAvaliacao(artigo);
+							System.out.println("\nArtigo: " + artigo.getId());
+							System.out.println("\nRevisor: " + revisor.getNome() );
+						}
+						System.out.println("\n\n");
+					}
+				}else {
+					for(AutorArtigo autorartigo : especialistasAutorArtigo ) {
+						if(autorartigo.getCPF().equalsIgnoreCase(especialista.getCPF())){
+					
+							AutorArtigo autor = new AutorArtigo(especialista.getCPF(), especialista.getSenha(), especialista.getTipo(), especialista.getSubTipo());
+					
+							for(Artigo artigo : artigos) {
+								if(artigo.getAutores().contains(autor)) {
+									autor.visualiarAvaliacao(artigo);
+									System.out.println("\nArtigo: " + artigo.getId());
+									for(RevisorArtigo revisor : artigo.getRevisores()) {
+										System.out.println("\nRevisores: " + revisor.getNome() );
+									}
+									
+									System.out.println("\n\n");
+								}
+							}
+						}	
+					}
+				}	
+			}
+		}
+	}
+	private void aceitarArtigo(Usuario usuarioProgramChaiirs) {
+		if(!usuarios.contains(usuarioProgramChaiirs)) {
+			System.out.print("Realize login para depois emitir certificados. ");
+			new Exception("Login não realizado");
+			return;
+		}
+			
+		Organizador organizador = new Organizador(usuarioProgramChaiirs.getCPF(),usuarioProgramChaiirs.getSenha(),usuarioProgramChaiirs.getTipo());
 		
+		if(!organizadores.contains(organizador)) {
+			System.out.print("O usuário não pode aceitar artigo, pois não é Organizador. ");
+			new Exception("Acesso não permitido");
+			return;
+		}
+		organizador.setSubTipo("P");
+		
+		ProgramChairs programChairs = new ProgramChairs(organizador.getCPF(), organizador.getSenha(), organizador.getTipo(), organizador.getSubTipo());
+		
+		if(!organizadoresProgramChairs.contains(programChairs)) {
+			System.out.print("O Organizador não pode aceitar artigos, pois não é Program Chairs. ");
+			new Exception("Acesso não permitido");
+			return;
+		}
+		
+		artigos = programChairs.aceitarArtigo(artigos);
+		for(Artigo artigo : artigos){
+			if(artigo.isArpovacao()) {
+				
+				System.out.println(" O "+artigo.getTitulo()+" de id "+artigo.getId()+". Foi aceito.");
+			}
+		}
 	}
 	
-	private void aceitarArtigo(Usuario usuario) {
+	private void rejeitarArtigo(Usuario usuarioProgramChaiirs) {
+		if(!usuarios.contains(usuarioProgramChaiirs)) {
+			System.out.print("Realize login para depois emitir certificados. ");
+			new Exception("Login não realizado");
+			return;
+		}
+			
+		Organizador organizador = new Organizador(usuarioProgramChaiirs.getCPF(),usuarioProgramChaiirs.getSenha(),usuarioProgramChaiirs.getTipo());
 		
-	}
-	
-	private void rejeitarArtigo(Usuario usuario) {
+		if(!organizadores.contains(organizador)) {
+			System.out.print("O usuário não pode aceitar artigo, pois não é Organizador. ");
+			new Exception("Acesso não permitido");
+			return;
+		}
+		organizador.setSubTipo("P");
 		
+		ProgramChairs programChairs = new ProgramChairs(organizador.getCPF(), organizador.getSenha(), organizador.getTipo(), organizador.getSubTipo());
+		
+		if(!organizadoresProgramChairs.contains(programChairs)) {
+			System.out.print("O Organizador não pode aceitar artigos, pois não é Program Chairs. ");
+			new Exception("Acesso não permitido");
+			return;
+		}
+		
+		artigos = programChairs.rejeitarArtigo(artigos);
+		for(Artigo artigo : artigos){
+			if(!artigo.isArpovacao()) {
+				
+				System.out.println(" O "+artigo.getTitulo()+" de id "+artigo.getId()+". Foi rejeitado.");
+			}
+		}
 	}
 	
 	private void listarArtigosAceitos() {
-		
+		Collections.sort(artigos);
+		if(artigos.isEmpty() || artigos.size() < 1 || artigos == null) {
+			System.out.println("\nNão existem artigos aceitos\n");
+		}else {
+			for(Artigo artigo : artigos){
+				if(artigo.isArpovacao()) {
+					System.out.println("\nArtigo : " + artigo.getTitulo());
+					System.out.println("\n\n");
+				}	
+			}
+		}	
 	}
 	
 	private void listarArtigosNegados() {
-		
+		Collections.sort(artigos);
+		if(artigos.isEmpty() || artigos.size() < 1 || artigos == null) {
+			System.out.println("\nNão existem artigos negados\n");
+		}else {
+			for(Artigo artigo : artigos){
+				if(!artigo.isArpovacao()) {
+					System.out.println("\nArtigo : " + artigo.getTitulo());
+					System.out.println("\n\n");
+				}	
+			}
+		}	
 	}
 	
 	private void visualizarDadosArtigo(Usuario usuario) {
-		
+		if(artigos.isEmpty() || artigos.size() < 1 || artigos == null) {
+			System.out.println("\nNão existem artigos\n");
+		}else {
+			for(Artigo artigo : artigos){
+				if(!artigo.isArpovacao()) {
+					System.out.println("\nTitulo : " + artigo.getTitulo());
+					System.out.println("\nResumo : " + artigo.getResumo());
+					System.out.println("\nAQuantidade de páginas : " + artigo.getQtdPaginas());
+					System.out.println("\nPalavras chvaes : " + artigo.getPalavaChave().toString());
+					System.out.println("\nData de Submissão: " + artigo.getDataSubmissao());
+					System.out.println("\nAutores : " + artigo.getAutores().toString());
+					System.out.println("\n\n");
+				}	
+			}
+		}	
 	}
 	private void listarParticipantes(){
 		Collections.sort(participantes);
@@ -366,7 +591,7 @@ public class Main {
 		do{
 			principal.exibirMenu();
 			
-			System.out.print("Opção escolhida: ");
+			System.out.print("Escolha uma opção: ");
 			opcao = scanner.nextShort();
 			
 			switch(opcao){
@@ -401,25 +626,86 @@ public class Main {
 					}
 					break;	
 				case 4:
-					principal.invalidarInscricao(usuario);
+					if(usuario.getCPF() == null || usuario.getCPF().isEmpty() ) {
+						System.out.println("Realize o login antes de acessar as demais opções ");
+					}else {
+						if(usuario.getTipo().equalsIgnoreCase("O")) {
+							principal.invalidarInscricao(usuario);
+						}else {
+							System.out.println("Apenas Organizadores podem invalidar inscrições ");
+						}
+					}
 					break;	
 				case 5:
-					principal.emitirCertificado(usuario);
+					if(usuario.getCPF() == null || usuario.getCPF().isEmpty() ) {
+						System.out.println("Realize o login antes de acessar as demais opções ");
+					}else {
+						if(usuario.getTipo().equalsIgnoreCase("O")) {
+							principal.emitirCertificado(usuario);
+						}else {
+							System.out.println("Apenas Organizadores podem validar inscrições ");
+						}
+					}
 					break;	
 				case 6:
-					principal.submeterArtigo(usuario);
+					if(usuario.getCPF() == null || usuario.getCPF().isEmpty() ) {
+						System.out.println("Realize o login antes de acessar as demais opções ");
+					}else {
+						if(usuario.getTipo().equalsIgnoreCase("E")) {
+							principal.submeterArtigo(usuario);
+						}else {
+							System.out.println("Apenas especialistas podem submeter artigos ");
+						}
+					}
+					
 					break;	
 				case 7:
-					principal.enviarAvaliacao(usuario);
+					if(usuario.getCPF() == null || usuario.getCPF().isEmpty() ) {
+						System.out.println("Realize o login antes de acessar as demais opções ");
+					}else {
+						if(usuario.getTipo().equalsIgnoreCase("E")) {
+							principal.enviarAvaliacao(usuario);
+						}else {
+							System.out.println("Apenas especialistas podem enviar avalições de  artigos ");
+						}
+					}
+					
 					break;	
 				case 8:
-					principal.visualizarAvaliacoes(usuario);
+					if(usuario.getCPF() == null || usuario.getCPF().isEmpty() ) {
+						System.out.println("Realize o login antes de acessar as demais opções ");
+					}else {
+						if(usuario.getTipo().equalsIgnoreCase("E") || usuario.getTipo().equalsIgnoreCase("O")) {
+							principal.visualizarAvaliacoes(usuario);
+						}else {
+							System.out.println("Apenas especialistas e organizadores podem visualizar avalições de  artigos ");
+						}
+					}
+					
 					break;	
 				case 9:
-					principal.aceitarArtigo(usuario);
+					if(usuario.getCPF() == null || usuario.getCPF().isEmpty() ) {
+						System.out.println("Realize o login antes de acessar as demais opções ");
+					}else {
+						if(usuario.getTipo().equalsIgnoreCase("O")) {
+							principal.aceitarArtigo(usuario);
+						}else {
+							System.out.println("Apenas Organizadores podem aceitar artigos ");
+						}
+					}
+					
 					break;	
 				case 10:
-					principal.rejeitarArtigo(usuario);
+					if(usuario.getCPF() == null || usuario.getCPF().isEmpty() ) {
+						System.out.println("Realize o login antes de acessar as demais opções ");
+					}else {
+						if(usuario.getTipo().equalsIgnoreCase("O")) {
+							principal.rejeitarArtigo(usuario);
+						}else {
+							System.out.println("Apenas Organizadores podem aceitar artigos ");
+						}
+					}
+					
 					break;	
 				case 11:
 					principal.listarArtigosAceitos();
@@ -433,9 +719,10 @@ public class Main {
 				case 14:
 					principal.listarParticipantes();
 					break;
-				/*
-				 * case 15: principal.exibirMenu(); break;
-				 */
+				 case 15:  
+					 System.out.println("Programa encerrado.");
+					 break;
+				
 				default:
 					principal.exibirMenu();
 			}
