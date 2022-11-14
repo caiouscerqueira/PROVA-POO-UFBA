@@ -3,6 +3,8 @@
  */
 package vo;
 
+import java.util.Objects;
+
 /**
  * @author CaiS2Lai
  *
@@ -128,6 +130,25 @@ public abstract class Pessoa {
 	 */
 	public void setInstituicaoVinculada(String instituicaoVinculada) {
 		this.instituicaoVinculada = instituicaoVinculada;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(CPF, instituicaoVinculada, nascimento, nome, senha, tituloAcademico);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof Pessoa)) {
+			return false;
+		}
+		Pessoa other = (Pessoa) obj;
+		return Objects.equals(CPF, other.CPF) && Objects.equals(instituicaoVinculada, other.instituicaoVinculada)
+				&& Objects.equals(nascimento, other.nascimento) && Objects.equals(nome, other.nome)
+				&& Objects.equals(senha, other.senha) && Objects.equals(tituloAcademico, other.tituloAcademico);
 	}
 	
 	

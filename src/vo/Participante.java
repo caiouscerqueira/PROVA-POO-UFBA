@@ -3,6 +3,8 @@
  */
 package vo;
 
+import java.util.Objects;
+
 /**
  * @author CaiS2Lai
  *
@@ -74,6 +76,29 @@ public class Participante extends Usuario implements Comparable<Participante> {
 	 */
 	public void setAssistiuPalestra(boolean assistiuPalestra) {
 		this.assistiuPalestra = assistiuPalestra;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(assistiuPalestra);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (!(obj instanceof Participante)) {
+			return false;
+		}
+		Participante other = (Participante) obj;
+		return assistiuPalestra == other.assistiuPalestra;
 	}
 	
 	

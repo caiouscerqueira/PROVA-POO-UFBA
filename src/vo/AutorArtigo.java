@@ -33,7 +33,28 @@ public class AutorArtigo extends Especialista {
 		this.setSubTipo("A");
 	}
 
+	private static boolean valida_paginas(String paginas){
+		 if(paginas.isEmpty()){
+				System.out.print("A quantidade de paginas não pode ser vazia.\n");
+				return false;
+			}else if(!paginas.matches("[0-9]+")) {
+				System.out.print("Digite apenas números.\n");
+				return false;
+			}
+		 return true;
+	}
 	
+	private static boolean valida_autores(String paginas){
+		 if(paginas.isEmpty()){
+				System.out.print("A quantidade de autores não pode ser vazia.\n");
+				return false;
+			}else if(!paginas.matches("[1-5]+")) {
+				System.out.print("São permitidos apenas de 1 a 5 autores por artigo.\n");
+				return false;
+			}
+		 return true;
+	}
+
 
 	public Artigo submeterArtigo(AutorArtigo autorArtigo) {
 		
@@ -41,7 +62,8 @@ public class AutorArtigo extends Especialista {
 		Artigo artigo = new Artigo();
 		List<AutorArtigo> listaAutores = new ArrayList<AutorArtigo>();
 		ArrayList<String> palavrasChaves = new ArrayList<String>(); 
-		int qtd_autores = 0;
+		String qtd_autores = "";
+		
 		try {
 			do {
 				System.out.print("Digite o título do artigo: ");
@@ -59,38 +81,34 @@ public class AutorArtigo extends Especialista {
 				
 				do {
 					System.out.print("Digite a quantidade de paginas do artigo: ");
-					if(!scanner.next().matches("[0-9]+")) {
-						System.out.print("Digite apenas números.\n");
+					artigo.setQtdPaginas(scanner.next());
+						
+					if(!valida_paginas(artigo.getQtdPaginas())) {
+						
+						System.out.print("Quantidade de paginas inválida ");
 					}
-				}while (!scanner.next().matches("[0-9]+"));
-				int qtd_paginas = Integer.parseInt(scanner.next());
-				artigo.setQtdPaginas(qtd_paginas);
-				artigo.setDataSubmissao(new Date());
+					artigo.setDataSubmissao(new Date());
+				}while (!artigo.getQtdPaginas().matches("[0-9]+"));
 				do {
 					System.out.print("Digite quantos autores o artigo possui (Artigos devem possuir de 1 a 5 autores): ");
-					if(!scanner.next().matches("[0-9]+")) {
-						System.out.print("Digite apenas números.\n");
+					qtd_autores= scanner.next();
+					if(!valida_autores(qtd_autores)) {
+						System.out.print("Quantidade de autores inválida ");
 					}
-					if(!scanner.next().matches("[1-5]+")) {
+					if(Integer.valueOf(qtd_autores) > Artigo.getQtdMaxAutores() || Integer.valueOf(qtd_autores) < Artigo.getQtdMinAutores()) {
 						System.out.print("Artigos devem possuir de 1 a 5 autores.\n");
 					}
+					}while (!qtd_autores.matches("[1-5]+"));
 					
-					qtd_autores = Integer.parseInt(scanner.nextLine());
-					if(qtd_autores > Artigo.getQtdMaxAutores() || qtd_autores < Artigo.getQtdMinAutores()) {
-						System.out.print("Artigos devem possuir de 1 a 5 autores.\n");
-					}
-					}while (!scanner.next().matches("[1-5]+"));
-					
-					for(int j =0; j< qtd_autores -1; j++) {
+					for(int j =0; j< Integer.valueOf(qtd_autores) -1; j++) {
 						AutorArtigo autoresArtigo = new AutorArtigo("E", "A");
 						
 						System.out.print("CPF do autor: ");
-						
-						if(!Util.valida_cpf(scanner.next())) {
+						autoresArtigo.setCPF(scanner.next());
+						if(!Util.valida_cpf(autoresArtigo.getCPF())) {
 							System.out.print("CPF do autor é invalido. Digite apenas os números.\n");
 						}
 						
-						autoresArtigo.setCPF(scanner.next());
 						
 						System.out.print("Nome do autor: ");
 						autoresArtigo.setNome(scanner.next());
@@ -108,8 +126,9 @@ public class AutorArtigo extends Especialista {
 					}
 					listaAutores.add(autorArtigo);
 					
-					if(listaAutores.size() == qtd_autores) {
+					if(listaAutores.size() == Integer.valueOf(qtd_autores)) {
 						artigo.setAutores(listaAutores);
+						System.out.print("Artigo submetido com sucesso!");
 					}else {
 						System.out.print("A quantidade de autores não corresponde a informada");
 						new Exception("Quantidade de auotres inválida");
@@ -128,5 +147,26 @@ public class AutorArtigo extends Especialista {
 		artigo.getRevisores();
 		
 	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (!(obj instanceof AutorArtigo)) {
+			return false;
+		}
+		return true;
+	}
+	
+	
 	
 }

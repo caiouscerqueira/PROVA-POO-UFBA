@@ -3,6 +3,8 @@
  */
 package vo;
 
+import java.util.Objects;
+
 /**
  * @author CaiS2Lai
  *
@@ -68,6 +70,27 @@ public class Especialista extends Usuario {
 	 */
 	public void setSubTipo(String subTipo) {
 		this.subTipo = subTipo;
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(areaEspecialidade, subTipo);
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (!(obj instanceof Especialista)) {
+			return false;
+		}
+		Especialista other = (Especialista) obj;
+		return Objects.equals(areaEspecialidade, other.areaEspecialidade) && Objects.equals(subTipo, other.subTipo);
 	}
 	
 	

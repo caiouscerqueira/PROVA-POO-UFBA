@@ -31,7 +31,7 @@ public class ProgramChairs extends Organizador {
 	public List<Artigo>  aceitarArtigo(List<Artigo> artigos) {
 		
 		for(int x= 0; x< artigos.size(); x++){
-			if(artigos.get(x).getQtdPaginas() > 30) {
+			if(Integer.valueOf(artigos.get(x).getQtdPaginas()) > 30) {
 				artigos.get(x).setArpovacao(true);
 			}
 		}
@@ -50,7 +50,7 @@ public class ProgramChairs extends Organizador {
 
 	public List<Artigo> rejeitarArtigo(List<Artigo> artigos) {
 		for(int x= 0; x< artigos.size(); x++){
-			if(artigos.get(x).getQtdPaginas() > 30) {
+			if(Integer.valueOf(artigos.get(x).getQtdPaginas()) > 30) {
 				artigos.get(x).setArpovacao(false);
 			}
 		}
@@ -58,4 +58,29 @@ public class ProgramChairs extends Organizador {
 		return artigos;
 		
 	}
+
+
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
+
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (!(obj instanceof ProgramChairs)) {
+			return false;
+		}
+		return true;
+	}
+	
+	
 }

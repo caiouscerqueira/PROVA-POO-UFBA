@@ -6,6 +6,7 @@ package vo;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author CaiS2Lai
@@ -17,7 +18,7 @@ public class Artigo implements Comparable<Artigo> {
 	private String titulo;
 	private String resumo;
 	private ArrayList<String> palavaChave;
-	private int qtdPaginas;
+	private String qtdPaginas;
 	private Date dataSubmissao;
 	private boolean aprovacao;
 	private List<AutorArtigo> autores;
@@ -33,7 +34,7 @@ public class Artigo implements Comparable<Artigo> {
 	 * @param qtdPaginas
 	 * @param dataSubmissao
 	 */
-	public Artigo(int id, String titulo, String resumo, ArrayList<String> palavaChave, int qtdPaginas,
+	public Artigo(int id, String titulo, String resumo, ArrayList<String> palavaChave, String qtdPaginas,
 			Date dataSubmissao) {
 		this.id = id ++;
 		this.titulo = titulo;
@@ -52,7 +53,7 @@ public class Artigo implements Comparable<Artigo> {
 	 * @param dataSubmissao
 	 * @param autores
 	 */
-	public Artigo(int id, String titulo, String resumo, ArrayList<String> palavaChave, int qtdPaginas,
+	public Artigo(int id, String titulo, String resumo, ArrayList<String> palavaChave, String qtdPaginas,
 			Date dataSubmissao, List<AutorArtigo> autores) {
 		this.id = id++;
 		this.titulo = titulo;
@@ -125,14 +126,14 @@ public class Artigo implements Comparable<Artigo> {
 	/**
 	 * @return the qtdPaginas
 	 */
-	public int getQtdPaginas() {
+	public String getQtdPaginas() {
 		return qtdPaginas;
 	}
 
 	/**
 	 * @param qtdPaginas the qtdPaginas to set
 	 */
-	public void setQtdPaginas(int qtdPaginas) {
+	public void setQtdPaginas(String qtdPaginas) {
 		this.qtdPaginas = qtdPaginas;
 	}
 
@@ -216,6 +217,26 @@ public class Artigo implements Comparable<Artigo> {
 	public int compareTo(Artigo o) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(aprovacao, autores, dataSubmissao, palavaChave, qtdPaginas, resumo, revisores, titulo);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof Artigo)) {
+			return false;
+		}
+		Artigo other = (Artigo) obj;
+		return aprovacao == other.aprovacao && Objects.equals(autores, other.autores)
+				&& Objects.equals(dataSubmissao, other.dataSubmissao) && Objects.equals(palavaChave, other.palavaChave)
+				&& qtdPaginas == other.qtdPaginas && Objects.equals(resumo, other.resumo)
+				&& Objects.equals(revisores, other.revisores) && Objects.equals(titulo, other.titulo);
 	}
 
 	/**

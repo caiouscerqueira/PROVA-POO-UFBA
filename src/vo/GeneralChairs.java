@@ -33,7 +33,7 @@ public class GeneralChairs extends Organizador {
 		
 		for(Usuario usuario : usuariosPendentes){
 			Participante participante = new Participante(usuario.getCPF(), usuario.getNome(), usuario.getNascimento(), usuario.getTituloAcademico(), usuario.getSenha(),usuario.getInstituicaoVinculada(), usuario.getTipo());
-			if(usuario.getTipo().equals("P")) {
+			if(usuario.getTipo().equals("P") && validar) {
 				participantesInscritos.add(participante);
 			}else {
 				participantesNegados.add(participante);
@@ -56,4 +56,29 @@ public class GeneralChairs extends Organizador {
 		return "CERTIFICADO EMITIDO";
 		
 	}
+
+
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
+
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (!(obj instanceof GeneralChairs)) {
+			return false;
+		}
+		return true;
+	}
+	
+	
 }
